@@ -179,6 +179,20 @@ public class TestMarkup {
 	}
 	
 	@Test
+	public void testMarkupEmptyMultiAttributesEmptyUnspaced() throws InvalidMarkupException {
+		m1 = new Markup("<member type=\"node\" ref=\"261728686\" role=\"\"/>");
+		assertEquals(Markup.EMPTY, m1.getType());
+		assertEquals("", m1.getText());
+		assertEquals("node", m1.getAttribute("type"));
+		assertTrue(m1.hasAttribute("type"));
+		assertEquals("261728686", m1.getAttribute("ref"));
+		assertTrue(m1.hasAttribute("ref"));
+		assertEquals("", m1.getAttribute("role"));
+		assertTrue(m1.hasAttribute("role"));
+		assertEquals("member", m1.getName());
+	}
+	
+	@Test
 	public void testMarkupEmptyMultiAttributesSpacedText() throws InvalidMarkupException {
 		m1 = new Markup("<node key=\"value\" key2=\"lala2\" life=\"42\" >TEEEXT 123</node>");
 		assertEquals(Markup.COMPLETE, m1.getType());

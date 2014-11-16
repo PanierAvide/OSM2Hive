@@ -169,7 +169,9 @@ public class OSMParser {
 		}
 		//Case of way node
 		else if(m.getName().equals("nd")) {
-			((Way) current).addNode("N"+m.getAttribute("ref"));
+			if(current != null && current instanceof Way) {
+				((Way) current).addNode("N"+m.getAttribute("ref"));
+			}
 		}
 		//Case of relation
 		else if(m.getName().equals("relation")) {
@@ -195,10 +197,12 @@ public class OSMParser {
 		}
 		//Case of relation member
 		else if(m.getName().equals("member")) {
-			String refMember = getId(m.getAttribute("type"), m.getAttribute("ref"));
-			
-			//Add member to relation
-			((Relation) current).addMember(m.getAttribute("role"), refMember);
+			if(current != null && current instanceof Relation) {
+				String refMember = getId(m.getAttribute("type"), m.getAttribute("ref"));
+				
+				//Add member to relation
+				((Relation) current).addMember(m.getAttribute("role"), refMember);
+			}
 		}
 		//Case of tag
 		else if(m.getName().equals("tag")) {

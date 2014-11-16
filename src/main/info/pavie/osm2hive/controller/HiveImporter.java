@@ -88,15 +88,22 @@ public abstract class HiveImporter extends GenericUDTF {
 	/**
 	 * Parses the given line from arguments and returns the read Element
 	 * @param args The Hive command arguments
+	 * @param markups The markups to read, separated with |, for example: "node|tag|nd|relation"
 	 * @return The read OSM element, or null if not ready
 	 * @throws InvalidMarkupException If the line isn't a well-formed XML markup
 	 */
-	protected Element preprocess(Object[] args) throws InvalidMarkupException {
-		//Parse the received line
-		String line = (String) stringOI.getPrimitiveJavaObject(args[0]);
-		parser.parse(line);
+	protected Element preprocess(Object[] args, String markups) throws InvalidMarkupException {
+		Element result = null;
 		
-		return (parser.isElementReady()) ? parser.getCurrentElement() : null;
+		//Parse the received line if necessary
+		String line = (String) stringOI.getPrimitiveJavaObject(args[0]);
+		
+		if(line.matches(".*("+markups+").*")) {
+			parser.parse(line);
+			result = (parser.isElementReady()) ? parser.getCurrentElement() : null;
+		}
+		
+		return result;
 	}
 	
 	/**

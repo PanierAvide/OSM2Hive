@@ -48,7 +48,7 @@ public class HiveRelationImporter extends HiveImporter {
 	@Override
 	public void process(Object[] args) throws HiveException {
 		try {
-			Element current = preprocess(args);
+			Element current = preprocess(args, "relation|tag|member");
 			
 			//Check if element is valid and is a node
 			if(current != null && current instanceof Relation) {

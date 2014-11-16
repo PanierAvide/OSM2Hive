@@ -46,7 +46,7 @@ public class HiveNodeImporter extends HiveImporter {
 	@Override
 	public void process(Object[] args) throws HiveException {
 		try {
-			Element current = preprocess(args);
+			Element current = preprocess(args, "node|tag");
 			
 			//Check if element is valid and is a node
 			if(current != null && current instanceof Node) {
