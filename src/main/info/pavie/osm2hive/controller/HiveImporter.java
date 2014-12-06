@@ -25,7 +25,7 @@ public abstract class HiveImporter extends GenericUDTF {
 	protected StringObjectInspector stringOI;
 	
 	/** OSM XML Parser **/
-	protected OSMParser parser;
+	protected static OSMParser parser = new OSMParser();
 	
 	/** Parsed OSM elements **/
 	protected Map<String,Element> elements;
@@ -48,7 +48,6 @@ public abstract class HiveImporter extends GenericUDTF {
 		}
 		
 		this.stringOI = (StringObjectInspector) arg1;
-		this.parser = new OSMParser();
 	}
 	
 	/**

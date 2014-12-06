@@ -7,9 +7,6 @@ import info.pavie.osm2hive.model.osm.Way;
 import info.pavie.osm2hive.model.xml.InvalidMarkupException;
 import info.pavie.osm2hive.model.xml.Markup;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * This class parses OSM XML file, line by line.
  * It uses the XML {@link Markup} parser, and create {@link Element}s objects.
@@ -20,12 +17,15 @@ public class OSMParser {
 	/** The element being parsed **/
 	private Element current;
 	
+	/** The last parsed element **/
+	private Element lastParsed;
+	
 	/** Is the current element ready (ie completely parsed) ? **/
 	private boolean isCurrentReady;
 
 //TODO Remove, debug purposes only
-	/** Last read lines **/
-	private List<String> lastLines;
+//	/** Last read lines **/
+//	private List<String> lastLines = new LinkedList<String>();
 //ENDTODO
 
 //CONSTRUCTORS
@@ -34,10 +34,8 @@ public class OSMParser {
 	 */
 	public OSMParser() {
 		current = null;
+		lastParsed = null;
 		isCurrentReady = false;
-		//TODO Remove, debug purposes only
-		lastLines = new LinkedList<String>();
-		//ENDTODO
 	}
 	
 //ACCESSORS
@@ -52,7 +50,7 @@ public class OSMParser {
 	 * @return The current element, or null if not ready.
 	 */
 	public Element getCurrentElement() {
-		return (isCurrentReady) ? current : null;
+		return (isCurrentReady) ? lastParsed : null;
 	}
 
 //OTHER METHODS
@@ -91,10 +89,10 @@ public class OSMParser {
 		Markup m = new Markup(line); //Parse the line
 		
 		//TODO Remove, debug purposes only
-		lastLines.add(line);
-		if(lastLines.size() > 20) {
-			lastLines.remove(0);
-		}
+//		lastLines.add(line);
+//		if(lastLines.size() > 20) {
+//			lastLines.remove(0);
+//		}
 		//ENDTODO
 		
 		switch(m.getType()) {
@@ -243,13 +241,15 @@ public class OSMParser {
 						|| (m.getName().equals("relation") && current instanceof Relation && ((Relation) current).getMembers().size() > 0)) {
 					
 					isCurrentReady = true;
+					lastParsed = current;
+					current = null;
 				}
 			} else {
-				//TODO Remove, debug purposes only
 				System.err.println("End markup not matching: "+m.getName()+" with current object "+current);
-				for(String s : lastLines) {
-					System.err.println(s);
-				}
+				//TODO Remove, debug purposes only
+//				for(String s : lastLines) {
+//					System.err.println(s);
+//				}
 				//ENDTODO
 			}
 		} else {
