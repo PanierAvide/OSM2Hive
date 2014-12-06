@@ -7,6 +7,9 @@ import info.pavie.osm2hive.model.osm.Way;
 import info.pavie.osm2hive.model.xml.InvalidMarkupException;
 import info.pavie.osm2hive.model.xml.Markup;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * This class parses OSM XML file, line by line.
  * It uses the XML {@link Markup} parser, and create {@link Element}s objects.
@@ -20,6 +23,11 @@ public class OSMParser {
 	/** Is the current element ready (ie completely parsed) ? **/
 	private boolean isCurrentReady;
 
+//TODO Remove, debug purposes only
+	/** Last read lines **/
+	private List<String> lastLines;
+//ENDTODO
+
 //CONSTRUCTORS
 	/**
 	 * Class constructor
@@ -27,6 +35,9 @@ public class OSMParser {
 	public OSMParser() {
 		current = null;
 		isCurrentReady = false;
+		//TODO Remove, debug purposes only
+		lastLines = new LinkedList<String>();
+		//ENDTODO
 	}
 	
 //ACCESSORS
@@ -78,6 +89,13 @@ public class OSMParser {
 	 */
 	public void parse(String line) throws InvalidMarkupException {
 		Markup m = new Markup(line); //Parse the line
+		
+		//TODO Remove, debug purposes only
+		lastLines.add(line);
+		if(lastLines.size() > 20) {
+			lastLines.remove(0);
+		}
+		//ENDTODO
 		
 		switch(m.getType()) {
 			//Opening markup, for example <node>
@@ -220,12 +238,19 @@ public class OSMParser {
 		if(m.getName().equals("node") || m.getName().equals("way") || m.getName().equals("relation")) {
 			//Add element to list, and delete current
 			if(current != null) {
-				if( (m.getName().equals("way") && ((Way) current).getNodes().size() >= 2)
-						|| m.getName().equals("node")
-						|| (m.getName().equals("relation") && ((Relation) current).getMembers().size() > 0)) {
+				if( (m.getName().equals("way") && current instanceof Way && ((Way) current).getNodes().size() >= 2)
+						|| (m.getName().equals("node") && current instanceof Node)
+						|| (m.getName().equals("relation") && current instanceof Relation && ((Relation) current).getMembers().size() > 0)) {
 					
 					isCurrentReady = true;
 				}
+			} else {
+				//TODO Remove, debug purposes only
+				System.err.println("End markup not matching: "+m.getName()+" with current object "+current);
+				for(String s : lastLines) {
+					System.err.println(s);
+				}
+				//ENDTODO
 			}
 		} else {
 			isCurrentReady = false;

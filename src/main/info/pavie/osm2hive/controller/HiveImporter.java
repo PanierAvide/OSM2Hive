@@ -98,7 +98,7 @@ public abstract class HiveImporter extends GenericUDTF {
 		//Parse the received line if necessary
 		String line = (String) stringOI.getPrimitiveJavaObject(args[0]);
 		
-		if(line.matches(".*("+markups+").*")) {
+		if(line.matches(".*?\\x3C\\x2F?("+markups+").*?")) {
 			parser.parse(line);
 			result = (parser.isElementReady()) ? parser.getCurrentElement() : null;
 		}

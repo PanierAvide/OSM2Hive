@@ -105,7 +105,7 @@ public class TestMarkup {
 	
 	@Test(expected=InvalidMarkupException.class)
 	public void testMarkupEmptyAttributeSpacedInvalidChar() throws InvalidMarkupException {
-		m1 = new Markup("<node key=\"val\'ue\" />");
+		m1 = new Markup("<node key=\"val\"ue\" />");
 	}
 	
 	@Test
@@ -193,7 +193,7 @@ public class TestMarkup {
 	}
 	
 	@Test
-	public void testMarkupEmptyMultiAttributesSpacedText() throws InvalidMarkupException {
+	public void testMarkupCompleteMultiAttributesSpacedText() throws InvalidMarkupException {
 		m1 = new Markup("<node key=\"value\" key2=\"lala2\" life=\"42\" >TEEEXT 123</node>");
 		assertEquals(Markup.COMPLETE, m1.getType());
 		assertEquals("TEEEXT 123", m1.getText());
