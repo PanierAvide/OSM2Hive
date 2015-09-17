@@ -30,6 +30,6 @@ That's all.
 License
 -------
 
-Copyright 2014 Adrien PAVIE
+Copyright 2014-2015 Adrien PAVIE
 
 Licensed under Apache License 2.0. See LICENSE for complete license.
